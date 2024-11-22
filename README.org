@@ -1,18 +1,18 @@
-* jest-test-mode.el
-[[https://melpa.org/#/jest-test-mode][file:https://melpa.org/packages/jest-test-mode-badge.svg]]
+* vite-test-mode.el
+[[https://melpa.org/#/jest-test-mode][file:https://melpa.org/packages/vite-test-mode-badge.svg]]
 
 
-Emacs minor mode for running jest (Nodejs test framework). Inspired by =ruby-test-mode= and =cider-test=.
+Emacs minor mode for running vitest (Nodejs test framework). Inspired by =ruby-test-mode, =cider-test= and forked from =jest-test-mode=.
 
 ** Features
-1. Uses =npx jest= to execute tests. This respect your project's version of =jest=.
+1. Uses =npx vitest= to execute tests. This respect your project's version of =vitest=.
 
 2. Keybindings to execute tests for the entire project, a test module, or a top-level test/describe block.
 
 3. File references in the Test Execution Buffer support jump to definition.
 
 ** Keybindings
-jest-test-mode comes with some default keybindings:
+vite-test-mode comes with some default keybindings:
 
    | Binding     | Action                                                           |
    |-------------+------------------------------------------------------------------|
@@ -25,24 +25,24 @@ jest-test-mode comes with some default keybindings:
    | ~C-c C-t d a~ | Re-runs the previous test command with node debugger.            |
 
 ** Installation
-Install through melpa as =jest-test-mode=.
+Install through melpa as =vite-test-mode=.
 
 To configure the project with =use-package=:
 
 #+begin_src elisp
-  (use-package jest-test-mode 
+  (use-package vite-test-mode 
     :ensure t 
-    :commands jest-test-mode
+    :commands vite-test-mode
     :hook (typescript-mode js-mode typescript-tsx-mode))
 #+end_src
 
 Manually:
 
 #+begin_src elisp
-  (require 'jest-test-mode)
-  (add-hook 'typescript-mode-hook 'jest-test-mode)
-  (add-hook 'js-mode-hook 'jest-test-mode)
-  (add-hook 'typescript-tsx-mode-hook 'jest-test-mode)
+  (require 'vite-test-mode)
+  (add-hook 'typescript-mode-hook 'vite-test-mode)
+  (add-hook 'js-mode-hook 'vite-test-mode)
+  (add-hook 'typescript-tsx-mode-hook 'vite-test-mode)
 #+end_src
 
 ** Resources
@@ -69,8 +69,8 @@ Verify package can be included cleanly:
   git clean -fdx
 
   # 4 package
-  make recipes/jest-test-mode
+  make recipes/vite-test-mode
 
   # 5 test-install
-  make sandbox INSTALL=jest-test-mode
+  make sandbox INSTALL=vite-test-mode
 #+end_src

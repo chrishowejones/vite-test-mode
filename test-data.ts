@@ -1,20 +1,12 @@
-// This is a manual test fixture for trying out jest-test-unit-at-point
+// This is a manual test fixture for trying out vite-test-unit-at-point
 describe("foo", () => {
-
   test("bar ^s", () => {
-    test("wahooo!", () => {
+    test("wahooo!", () => {});
+  });
 
-    })
-  })
+  it("hello world", () => {});
 
-  it('hello world', () => {
+  it("hello world", () => {});
 
-  })
-
-  it("hello world", () => {
-
-  })
-
-  it.concurrently("foo bar", () => {
-  })
-})
+  it.concurrently("foo bar", () => {});
+});
