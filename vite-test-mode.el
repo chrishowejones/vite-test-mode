@@ -57,12 +57,15 @@
 ;; for seq-concatenate
 (require 'seq)
 
+(require 'ansi-color)
+;; (require 'xterm-color)
+
 (defgroup vite-test nil
   "Minor mode providing commands for running vite tests in Node.js."
   :group 'js)
 
 (defcustom vite-test-options
-  '("--color")
+  '("--run")
   "Pass extra command line options to vite when running tests."
   :initialize 'custom-initialize-default
   :type '(list string)
@@ -76,7 +79,7 @@
   :group 'vite-test-mode)
 
 (defcustom vite-test-command-string
-  "npx %s vite %s %s"
+  "npx %s vitest %s %s"
   "The command by which vite is run.
 
 Placeholders are:
@@ -155,7 +158,7 @@ Runs the provided FORM with `default-directory` bound."
   "Find the testfile to run. Assumed to be the current file."
   (buffer-file-name))
 
-(defvar vite-test-not-found-message "No test among visible bufers")
+(defvar vite-test-not-found-message "No test among visible buffers")
 
 ;;;###autoload
 (defun vite-test-run ()
@@ -164,20 +167,20 @@ Runs the provided FORM with `default-directory` bound."
   (let ((filename (vite-test-find-file)))
     (if filename
         (vite-test-from-project-directory filename
-                                          (vite-test-run-command (vite-test-command filename)))
+          (vite-test-run-command (vite-test-command filename)))
       (message vite-test-not-found-message))))
 
 (defun vite-test-run-all-tests ()
   "Run all test in the project."
   (interactive)
   (vite-test-from-project-directory (buffer-file-name)
-                                    (vite-test-run-command (vite-test-command ""))))
+    (vite-test-run-command (vite-test-command ""))))
 
 (defun vite-test-rerun-test ()
   "Run the previously run test in the project."
   (interactive)
   (vite-test-from-project-directory (buffer-file-name)
-                                    (vite-test-run-command vite-test-last-test-command)))
+    (vite-test-run-command vite-test-last-test-command)))
 
 (defun vite-test-run-at-point ()
   "Run the enclosing it/test/describe block surrounding the current point."
@@ -186,27 +189,27 @@ Runs the provided FORM with `default-directory` bound."
         (test (vite-test-unit-at-point)))
     (if (and filename test)
         (vite-test-from-project-directory filename
-                                          (let ((vite-test-options (seq-concatenate 'list vite-test-options (list "-t" test))))
-                                            (vite-test-run-command (vite-test-command filename))))
+          (let ((vite-test-options (seq-concatenate 'list vite-test-options (list "-t" test))))
+            (vite-test-run-command (vite-test-command filename))))
       (message vite-test-not-found-message))))
 
 (defun vite-test-debug ()
   "Run the test with an inline debugger attached."
   (interactive)
   (vite-test-with-debug-flags
-   (vite-test-run)))
+    (vite-test-run)))
 
 (defun vite-test-debug-rerun-test ()
   "Run the test with an inline debugger attached."
   (interactive)
   (vite-test-with-debug-flags
-   (vite-test-rerun-test)))
+    (vite-test-rerun-test)))
 
 (defun vite-test-debug-run-at-point ()
   "Run the test with an inline debugger attached."
   (interactive)
   (vite-test-with-debug-flags
-   (vite-test-run-at-point)))
+    (vite-test-run-at-point)))
 
 (defvar vite-test-declaration-regex "^[ \\t]*\\(it\\|test\\|describe\\)\\(\\.\\(.*\\)\\)?(\\(.*\\),"
   "Regex for finding a test declaration in vite.
@@ -256,18 +259,25 @@ Looks for it, test or describe from where the cursor is"
 ;; Handle errors that match this:
 ;; at addSpecsToSuite (node_modules/vite-jasmine2/build/jasmine/Env.js:522:17)
 (defvar vite-test-compilation-error-regexp-alist-alist
-  '((vite "at [^ ]+ (\\(.+?\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)" 1 2 3)))
+  '((vitest "[^ >]+ (:\\([[:digit:]]+\\):\\([[:digit:]]+\\)" 1 2 3)))
 
 (defvar vite-test-compilation-error-regexp-alist
   (mapcar 'car vite-test-compilation-error-regexp-alist-alist))
 
 (define-compilation-mode vite-test-compilation-mode "Vite Compilation"
   "Compilation mode for Vite output."
-  (add-hook 'compilation-filter-hook 'vite-test-colorize-compilation-buffer nil t))
+  (add-hook 'compilation-filter-hook 'xterm-color-filter-hook ))
 
 (defun vite-test-colorize-compilation-buffer ()
   "Colorize the compilation buffer."
   (ansi-color-apply-on-region compilation-filter-start (point)))
+
+;; (setq compilation-environment '("TERM=xterm-256color"))
+
+;; (defun my/advice-compilation-filter (f proc string)
+;;   (funcall f proc (xterm-color-filter string)))
+
+;; (advice-add 'compilation-filter :around #'my/advice-compilation-filter)
 
 (defconst vite-test-compilation-buffer-name-base "*vite-test-compilation*")
 
