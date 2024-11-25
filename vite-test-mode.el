@@ -1,10 +1,10 @@
-;;; vite-test-mode.el --- Minor mode for running Node.js tests using vite -*- lexical-binding: t; -*-
+;;; vite-test-mode.el --- Minor mode for running Node.js tests using vitest -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2020 Raymond Huang
+;; Copyright (C) 2024 Chris Howe-Jones
 
-;; Author: Raymond Huang <rymndhng@gmail.com>
-;; Maintainer: Raymond Huang <rymndhng@gmail.com>
-;; URL: https://github.com/rymndhng/vite-test-mode.el
+;; Author: Chris Howe-Jones <chris.howejones@gmail.com>
+;; Maintainer: Chris Howe-Jones <chris.howejones@gmail.com>
+;; URL: https://github.com/chrishowejones/vite-test-mode.el
 ;; Version: 0
 ;; Package-Requires: ((emacs "25.1"))
 
@@ -28,7 +28,7 @@
 ;; from failures and errors are marked and can be clicked to bring up the
 ;; relevant source file, where point is moved to the named line.
 ;;
-;; The tests should be written with vite. File names are supposed to end in `.test.ts'
+;; The tests should be written with vitest. File names are supposed to end in `.test.ts'
 ;;
 ;; Using the command `vite-test-run-at-point`, you can run test cases from the
 ;; current file.
@@ -66,7 +66,7 @@
 
 (defcustom vite-test-options
   '("--run")
-  "Pass extra command line options to vite when running tests."
+  "Pass extra command line options to vitest when running tests."
   :initialize 'custom-initialize-default
   :type '(list string)
   :group 'vite-test-mode)
@@ -136,8 +136,8 @@ Runs the provided FORM with `default-directory` bound."
 (defmacro vite-test-with-debug-flags (form)
   "Execute FORM with debugger flags set."
   (declare (indent 0))
-  `(let ((vite-test-options (seq-concatenate 'list vite-test-options (list "--runInBand") ))
-         (vite-test-npx-options (seq-concatenate 'list vite-test-npx-options (list "--node-arg" "inspect"))))
+  `(let ((vite-test-options (seq-concatenate 'list vite-test-options (list "--inspect-brk" "--pool" "forks" "--poolOptions.forks.singleFork")))
+         (vite-test-npx-options))
      ,form))
 
 (defun vite-test-project-root (filename)
