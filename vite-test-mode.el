@@ -259,25 +259,18 @@ Looks for it, test or describe from where the cursor is"
 ;; Handle errors that match this:
 ;; at addSpecsToSuite (node_modules/vite-jasmine2/build/jasmine/Env.js:522:17)
 (defvar vite-test-compilation-error-regexp-alist-alist
-  '((vitest "[^ >]+ (:\\([[:digit:]]+\\):\\([[:digit:]]+\\)" 1 2 3)))
+  '((Vite "\.ts\\|.js.*:\\([[:digit:]]+\\):\\([[:digit:]]+\\)" 1 2)))
 
 (defvar vite-test-compilation-error-regexp-alist
   (mapcar 'car vite-test-compilation-error-regexp-alist-alist))
 
 (define-compilation-mode vite-test-compilation-mode "Vite Compilation"
   "Compilation mode for Vite output."
-  (add-hook 'compilation-filter-hook 'xterm-color-filter-hook ))
+  (add-hook 'compilation-filter-hook 'vite-test-colorize-compilation-buffer nil t))
 
 (defun vite-test-colorize-compilation-buffer ()
   "Colorize the compilation buffer."
   (ansi-color-apply-on-region compilation-filter-start (point)))
-
-;; (setq compilation-environment '("TERM=xterm-256color"))
-
-;; (defun my/advice-compilation-filter (f proc string)
-;;   (funcall f proc (xterm-color-filter string)))
-
-;; (advice-add 'compilation-filter :around #'my/advice-compilation-filter)
 
 (defconst vite-test-compilation-buffer-name-base "*vite-test-compilation*")
 
