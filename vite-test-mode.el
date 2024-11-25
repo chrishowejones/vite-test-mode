@@ -79,7 +79,7 @@
   :group 'vite-test-mode)
 
 (defcustom vite-test-command-string
-  "npx %s vitest %s %s"
+  "FORCE_COLOR=1 npx %s vitest %s %s"
   "The command by which vite is run.
 
 Placeholders are:
@@ -255,11 +255,8 @@ Looks for it, test or describe from where the cursor is"
 
 ;;; compilation-mode support
 
-;; Source: https://emacs.stackexchange.com/questions/27213/how-can-i-add-a-compilation-error-regex-for-node-js
-;; Handle errors that match this:
-;; at addSpecsToSuite (node_modules/vite-jasmine2/build/jasmine/Env.js:522:17)
 (defvar vite-test-compilation-error-regexp-alist-alist
-  '((Vite "\.ts\\|.js.*:\\([[:digit:]]+\\):\\([[:digit:]]+\\)" 1 2)))
+  '((vitest "\\(\\.ts\\|\\.js\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)" 1 2)))
 
 (defvar vite-test-compilation-error-regexp-alist
   (mapcar 'car vite-test-compilation-error-regexp-alist-alist))
