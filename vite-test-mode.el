@@ -256,7 +256,7 @@ Looks for it, test or describe from where the cursor is"
 ;;; compilation-mode support
 
 (defvar vite-test-compilation-error-regexp-alist-alist
-  '((vitest "\\(\\.ts\\|\\.js\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)" 1 2)))
+  '((vitest " ❯ \\(.*\\.ts\\|.*\\.js\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)" 1 2 3)))
 
 (defvar vite-test-compilation-error-regexp-alist
   (mapcar 'car vite-test-compilation-error-regexp-alist-alist))
